@@ -5,7 +5,7 @@
 ** Login   <scutar_n@epitech.net>
 **
 ** Started on  Sun Apr  2 16:00:57 2017 Nathan Scutari
-** Last update Sun Apr  2 16:06:50 2017 Nathan Scutari
+** Last update Sun Apr  2 21:41:05 2017 Nathan Scutari
 */
 
 #include "lemi.h"
@@ -92,6 +92,7 @@ int	main_turn(t_shared *ids, int team, char *map)
   semop(ids->sem_id, &sops, 1);
   move_in_map(map, team, ids);
   sops.sem_op = 1;
+  semctl(ids->sem_id, 0, SETVAL, 0);
   semop(ids->sem_id, &sops, 1);
   return (0);
 }

@@ -5,7 +5,7 @@
 ** Login   <scutar_n@epitech.net>
 **
 ** Started on  Sun Apr  2 15:17:42 2017 Nathan Scutari
-** Last update Sun Apr  2 16:28:29 2017 Nathan Scutari
+** Last update Sun Apr  2 21:46:45 2017 Nathan Scutari
 */
 
 #include "lemi.h"
@@ -21,6 +21,8 @@ int	find_id(t_player *player)
     {
       id_ok = 1;
       tmp = player;
+      if (id == 26)
+	return (-1);
       while (tmp)
 	{
 	  if (id == tmp->player_id)

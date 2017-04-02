@@ -5,7 +5,7 @@
 ** Login   <scutar_n@epitech.net>
 **
 ** Started on  Sun Apr  2 16:18:26 2017 Nathan Scutari
-** Last update Sun Apr  2 16:20:29 2017 Nathan Scutari
+** Last update Sun Apr  2 21:37:39 2017 Nathan Scutari
 */
 
 #include "lemi.h"
@@ -46,21 +46,40 @@ void	print_game_state(char *map, int turn)
   printf("Turn: %d\n", turn);
 }
 
+int	check_team(t_msg *msg, t_player *list)
+{
+  int		team_member;
+
+  if (!list)
+    return (msg->source_id);
+  team_member = 0;
+  while (list)
+    {
+      if (list->player_team == msg->team)
+	++team_member;
+      list = list->next;
+    }
+  if (team_member >= 5)
+    return (-1);
+  return (msg->source_id);
+}
+
 int	get_msg(int msg_id, t_player **list)
 {
-  int	id;
   t_msg	msg;
 
+  msg.new_player = 0;
   if (msgrcv(msg_id, &msg, sizeof(msg) - sizeof(long), 1, 0) == -1)
     exit(1);
   if (msg.new_player)
     {
-      id = find_id(*list);
+      msg.source_id = find_id(*list);
+      msg.source_id = check_team(&msg, *list);
       msg.mtype = 42;
-      msg.source_id = id;
       if (msgsnd(msg_id, &msg, sizeof(msg) - sizeof(long), 0) == -1)
 	exit(1);
-      register_player(list, &msg);
+      if (msg.source_id != -1)
+	register_player(list, &msg);
       return (1);
     }
   return (0);

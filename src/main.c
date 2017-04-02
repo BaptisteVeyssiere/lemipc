@@ -5,7 +5,7 @@
 ** Login   <scutar_n@epitech.net>
 **
 ** Started on  Wed Mar 29 13:54:51 2017 Nathan Scutari
-** Last update Sun Apr  2 17:15:15 2017 Nathan Scutari
+** Last update Sun Apr  2 20:49:40 2017 Nathan Scutari
 */
 
 #include "lemi.h"
@@ -20,6 +20,7 @@ int	access_map(int team, t_shared *ids, char *map)
   semop(ids->sem_id, &sops, 1);
   move_in_map(map, team, ids);
   sops.sem_op = 1;
+  semctl(ids->sem_id, 0, SETVAL, 0);
   semop(ids->sem_id, &sops, 1);
   return (0);
 }
@@ -34,6 +35,7 @@ void	modify_map(int pos, char *map, t_shared *ids)
   semop(ids->sem_id, &sops, 1);
   map[pos] = 0;
   sops.sem_op = 1;
+  semctl(ids->sem_id, 0, SETVAL, 0);
   semop(ids->sem_id, &sops, 1);
 }
 

@@ -25,7 +25,8 @@ SRC	= src/main.c \
 	src/main_process_ctl.c \
 	src/signal_catch.c \
 	src/game_loop.c \
-	src/map_position.c
+	src/map_position.c \
+	src/errors.c
 
 SRCDIR	= src
 

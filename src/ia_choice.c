@@ -5,7 +5,7 @@
 ** Login   <scutar_n@epitech.net>
 **
 ** Started on  Sun Apr  2 16:14:00 2017 Nathan Scutari
-** Last update Sun Apr  2 16:17:52 2017 Nathan Scutari
+** Last update Sun Apr  2 21:45:30 2017 Nathan Scutari
 */
 
 #include "lemi.h"
@@ -57,7 +57,12 @@ void	attack_ennemy(char *map, int team, t_shared *ids)
 void	observe_move(char *map, t_shared *ids, int team)
 {
   int	move[4] = {1, -1, 50, -50};
+  int	value;
 
+  value = rand() % 4;
+  if ((value == 0 && ids->my_p % 50 == 0) ||
+      (value == 1 && ids->my_p % 50 == 49))
+    return ;
   move_to_pos(map, ids, team, ids->my_p + move[rand() % 4]);
 }
 
@@ -74,9 +79,15 @@ void	move_to_pos(char *map, t_shared *ids, int team, int to)
       map[x + y * 50] = team + 48;
       map[ids->my_p] = 0;
       ids->my_p = to;
+      ids->try = 0;
+    }
+  else if (ids->try < 20)
+    {
+      ids->try += 1;
+      observe_move(map, ids, team);
     }
   else
-    observe_move(map, ids, team);
+    ids->try = 0;
 }
 
 void	get_closer_to_pos(char *map, t_shared *ids, int team, int pos)

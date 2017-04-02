@@ -5,7 +5,7 @@
 ** Login   <scutar_n@epitech.net>
 **
 ** Started on  Fri Mar 31 15:44:34 2017 Nathan Scutari
-** Last update Sun Apr  2 16:52:52 2017 Nathan Scutari
+** Last update Sun Apr  2 21:48:18 2017 Nathan Scutari
 */
 
 #ifndef LEMI_H_
@@ -53,6 +53,7 @@ typedef struct	s_shared
   int		sfd;
   int		caution;
   int		my_p;
+  int		try;
   key_t		key;
 }		t_shared;
 
@@ -112,6 +113,7 @@ void	print_border(int);
 void	print_game_state(char *, int);
 int	get_msg(int, t_player **);
 void	death_message(t_player *, t_shared *, int *);
+int	check_team(t_msg *, t_player *);
 
 /*
 ** signal_catch.c
@@ -143,5 +145,10 @@ int		add_player(key_t, char **);
 int	place_far_away(char *, int);
 int	closest_ennemy(char *, int);
 int	place_nearby(char *, int);
+
+/*
+** errors.c
+*/
+int	print_err(char *, int);
 
 #endif /* !LEMI_H_ */

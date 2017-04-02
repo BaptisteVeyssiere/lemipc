@@ -5,7 +5,7 @@
 ** Login   <scutar_n@epitech.net>
 **
 ** Started on  Sun Apr  2 15:39:08 2017 Nathan Scutari
-** Last update Sun Apr  2 17:15:37 2017 Nathan Scutari
+** Last update Sun Apr  2 21:47:56 2017 Nathan Scutari
 */
 
 #include <stdlib.h>
@@ -36,7 +36,11 @@ t_player	*init(t_shared *ids, key_t key, char **map, char **av)
     return (NULL);
   *map[0] = msg.team + 48;
   ids->my_p = 0;
+  ids->try = 0;
+  ids->agressivity = rand() % (10 + 1) + 1;
+  ids->caution = rand() % (10 + 1) + 1;
   sops.sem_op = 1;
+  semctl(ids->sem_id, 0, SETVAL, 0);
   semop(ids->sem_id, &sops, 1);
   return (list);
 }
@@ -56,6 +60,7 @@ int	init_player(t_shared *ids, key_t key, char **av, char **map)
     return (-1);
   ids->agressivity = rand() % (10 + 1) + 1;
   ids->caution = rand() % (10 + 1) + 1;
+  ids->try = 0;
   sops.sem_num = 0;
   sops.sem_flg = 0;
   sops.sem_op = -1;
@@ -63,6 +68,7 @@ int	init_player(t_shared *ids, key_t key, char **av, char **map)
   pos = place_position(*map, team);
   ids->my_p = pos;
   sops.sem_op = 1;
+  semctl(ids->sem_id, 0, SETVAL, 0);
   semop(ids->sem_id, &sops, 1);
   return (pos);
 }
@@ -83,7 +89,6 @@ int	init_signal(t_shared *ids)
 
 int	main_process(key_t key, char **av)
 {
-  int			id;
   t_shared		ids;
   t_msg			msg;
   t_player		*list;
@@ -97,11 +102,11 @@ int	main_process(key_t key, char **av)
   while (enough_player(list) == 0)
     {
       msgrcv(ids.msg_id, &msg, sizeof(msg) - sizeof(long), 1, 0);
-      id = find_id(list);
+      msg.source_id = find_id(list);
       msg.mtype = 42;
-      msg.source_id = id;
+      if (msg.source_id != -1 && (msg.source_id = check_team(&msg, list)) != -1)
+	register_player(&list, &msg);
       msgsnd(ids.msg_id, &msg, sizeof(msg) - sizeof(long), 0);
-      register_player(&list, &msg);
     }
   play_game_main(&ids, list, map, team);
   shmctl(ids.shm_id, IPC_RMID, NULL);
@@ -127,7 +132,8 @@ int	add_player(key_t key, char **av)
   msg.team = team;
   msgsnd(ids.msg_id, &msg, sizeof(msg) - sizeof(long), 0);
   msgrcv(ids.msg_id, &msg, sizeof(msg) - sizeof(long), 42, 0);
-  id = msg.source_id;
+  if ((id = msg.source_id) == -1)
+    return (print_err("Can not join the arena, the game master refused\n", 0));
   play_game(&ids, id, team, map);
   return (0);
 }
