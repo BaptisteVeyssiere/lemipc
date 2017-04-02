@@ -16,7 +16,16 @@ CC	= gcc
 MKDIR	= mkdir -p
 
 SRC	= src/main.c \
-	src/init.c
+	src/init_tools.c \
+	src/dead_check.c \
+	src/game_start_end.c \
+	src/new_player_tools.c \
+	src/distance_tools.c \
+	src/ia_choice.c \
+	src/main_process_ctl.c \
+	src/signal_catch.c \
+	src/game_loop.c \
+	src/map_position.c
 
 SRCDIR	= src
 
