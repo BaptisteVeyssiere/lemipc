@@ -5,7 +5,7 @@
 ** Login   <scutar_n@epitech.net>
 **
 ** Started on  Wed Mar 29 13:54:51 2017 Nathan Scutari
-** Last update Sun Apr  2 20:49:40 2017 Nathan Scutari
+** Last update Mon Apr  3 12:18:36 2017 Nathan Scutari
 */
 
 #include "lemi.h"
@@ -64,9 +64,15 @@ int	main(int ac, char **av)
   if (ac >= 3)
     {
       if (shm_id == -1)
-	main_process(key, av);
+	{
+	  printf("main\n");
+	  main_process(key, av);
+	}
       else
-	add_player(key, av);
+	{
+	  printf("player\n");
+	  add_player(key, av);
+	}
     }
   return (0);
 }

@@ -5,7 +5,7 @@
 ** Login   <scutar_n@epitech.net>
 **
 ** Started on  Sun Apr  2 15:39:08 2017 Nathan Scutari
-** Last update Sun Apr  2 21:47:56 2017 Nathan Scutari
+** Last update Mon Apr  3 11:34:17 2017 Nathan Scutari
 */
 
 #include <stdlib.h>
@@ -101,7 +101,8 @@ int	main_process(key_t key, char **av)
   team = get_team(av[2]);
   while (enough_player(list) == 0)
     {
-      msgrcv(ids.msg_id, &msg, sizeof(msg) - sizeof(long), 1, 0);
+      if ((msgrcv(ids.msg_id, &msg, sizeof(msg) - sizeof(long), 1, 0)) == -1)
+	return (1);
       msg.source_id = find_id(list);
       msg.mtype = 42;
       if (msg.source_id != -1 && (msg.source_id = check_team(&msg, list)) != -1)
